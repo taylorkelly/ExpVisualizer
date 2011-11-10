@@ -113,6 +113,11 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
             int deltaX = newX - oldX;
             deltaX *= 1.5;
             
+            if(Math.abs(deltaX) > 100)  {
+                oldX = newX;
+                return;
+            }
+            
             Rectangle bounds = basicPanel.getBounds();
             Point origin = bounds.getLocation();
 
@@ -140,6 +145,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 origin.setLocation(origin.getX() + 600, origin.getY());
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
+                System.out.println(deltaX);
             }
         }
         oldX = newX;
@@ -155,7 +161,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mousePressed(MouseEvent me) {
-        oldX = Integer.MAX_VALUE;
+        //oldX = Integer.MAX_VALUE;
     }
 
     @Override
