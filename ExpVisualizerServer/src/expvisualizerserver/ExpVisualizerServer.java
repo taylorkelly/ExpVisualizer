@@ -145,7 +145,6 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 origin.setLocation(origin.getX() + 600, origin.getY());
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
-                System.out.println(deltaX);
             }
         }
         oldX = newX;
