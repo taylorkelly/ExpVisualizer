@@ -1,6 +1,7 @@
 package expvisualizerserver;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,7 +96,20 @@ public class MapPanel extends JPanel {
 
         //Map
         g2d.drawImage(img, 0, 600 - img.getHeight(), this);
-
+        
+        int ovalHeight = 20;
+        int x = (getWidth()-ovalHeight)/2;
+        int y = (600 - img.getHeight())+(img.getHeight()-ovalHeight)/2;
+        
+        
+        GradientPaint gradient = new GradientPaint(x+ovalHeight/2, y, new Color(122,188,255), x+ovalHeight/ 2, y+ovalHeight, new Color(64,150,238), true);
+        g2d.setPaint(gradient);
+        g2d.fillOval(x, y, ovalHeight, ovalHeight);
+        
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawOval(x, y, ovalHeight, ovalHeight);
+        
 
         // Overlay shading
         double percent = Math.abs(this.getBounds().getX()) / 600.0;
@@ -131,7 +146,7 @@ public class MapPanel extends JPanel {
 
     public URL getMapURL() throws MalformedURLException {
         StringBuilder builder = new StringBuilder();
-        builder.append("http://maps.googleapis.com/maps/api/staticmap?center=Zurich&zoom=13&size=600x350&sensor=false");
+        builder.append("http://maps.googleapis.com/maps/api/staticmap?center=47+22'+8+32'&zoom=13&size=600x350&sensor=false");
         return new URL(builder.toString());
     }
 
