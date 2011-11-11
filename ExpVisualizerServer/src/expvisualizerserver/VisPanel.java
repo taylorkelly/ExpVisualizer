@@ -40,7 +40,7 @@ public class VisPanel extends JPanel {
 
 
         for (Pulse pulse : pulses) {
-            pulse.draw(g, this.getWidth(), this.getHeight());
+            pulse.draw(g2d, this.getWidth(), this.getHeight());
         }
 
         drawLifeline(g2d);

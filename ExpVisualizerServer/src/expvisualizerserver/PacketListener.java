@@ -46,6 +46,8 @@ public class PacketListener extends Thread {
                     pulses.add(new Pulse(Color.YELLOW));  
                 } else if(received.equalsIgnoreCase("pink")) {
                     pulses.add(new Pulse(Color.PINK));  
+                } else if(received.equalsIgnoreCase("clear")) {
+                    pulses.add(new Pulse(VisPanel.BACKGROUND_COLOR));  
                 }
             } catch (IOException e) {
                 e.printStackTrace();

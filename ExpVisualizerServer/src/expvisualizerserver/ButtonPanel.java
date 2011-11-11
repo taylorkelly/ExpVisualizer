@@ -40,7 +40,6 @@ class ButtonPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == dead) {
-            pulses.add(Pulse.deadPulse());
         } else if (ae.getSource() == green) {
             pulses.add(new Pulse(Color.GREEN));
         } else if (ae.getSource() == red) {
