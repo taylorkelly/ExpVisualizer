@@ -160,12 +160,12 @@ public class MapPanel extends JPanel {
             width *= ratio;
             height *= ratio;
             if (height > maxSize) {
-                ratio = maxSize / HEIGHT;
+                ratio = maxSize / height;
                 width *= ratio;
                 height *= ratio;
             }
-        } else if (HEIGHT > maxSize) {
-            double ratio = maxSize / HEIGHT;
+        } else if ((0.6*HEIGHT) > maxSize) {
+            double ratio = maxSize / (0.6*HEIGHT);
             width *= ratio;
             height *= ratio;
         }

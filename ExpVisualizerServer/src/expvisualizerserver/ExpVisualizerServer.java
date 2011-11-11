@@ -33,9 +33,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
     private List<Pulse> pulses;
     private Timer timer;
     private PacketListener listener;
-    
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 800;
+    public static final int WIDTH = 700;
+    public static final int HEIGHT = 700;
 
     public ExpVisualizerServer() throws IOException {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,7 +58,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
         mapPanel = new MapPanel(pulses);
         mapPanel.addMouseMotionListener(this);
-        basicPanel.addMouseListener(this);
+        mapPanel.addMouseListener(this);
 
 
         this.add(basicPanel);
@@ -152,6 +151,70 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         }
         oldX = newX;
     }
+    private Timer slideTimer;
+
+    private void slideTo(int goalPosition) {
+        slideTimer = new Timer(1000 / 45, new SlideListener(goalPosition, 15));
+        slideTimer.start();
+    }
+
+    private class SlideListener implements ActionListener {
+        private int goalPosition;
+        private int currTicks;
+        private int numTicks;
+        private int stepSize;
+
+        public SlideListener(int goalPosition, int numTicks) {
+            this.goalPosition = goalPosition;
+            this.currTicks = 0;
+            this.numTicks = numTicks;
+            Rectangle bounds = basicPanel.getBounds();
+            Point origin = bounds.getLocation();
+            int x = (int) origin.getX();
+            this.stepSize = (goalPosition - x) / numTicks;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            Rectangle bounds = basicPanel.getBounds();
+            Point origin = bounds.getLocation();
+            int x = (int) origin.getX();
+
+            if (currTicks >= numTicks) {
+                slideTimer.stop();
+                
+                origin.setLocation(goalPosition, origin.getY());
+                bounds.setLocation(origin);
+                basicPanel.setBounds(bounds);
+
+                origin.setLocation(goalPosition+WIDTH, origin.getY());
+                bounds.setLocation(origin);
+                mapPanel.setBounds(bounds);
+            } else {
+                int deltaX = stepSize;
+                origin.setLocation(origin.getX() + deltaX, origin.getY());
+                bounds.setLocation(origin);
+                basicPanel.setBounds(bounds);
+
+                origin.setLocation(origin.getX() + WIDTH, origin.getY());
+                bounds.setLocation(origin);
+                mapPanel.setBounds(bounds);
+
+                currTicks++;
+            }
+
+        }
+    }
+
+    private void finishSliding() {
+        Rectangle bounds = basicPanel.getBounds();
+        Point origin = bounds.getLocation();
+        int x = (int) origin.getX();
+        if (x > -WIDTH / 2) {
+            slideTo(0);
+        } else {
+            slideTo(-WIDTH);
+        }
+    }
 
     @Override
     public void mouseMoved(MouseEvent me) {
@@ -169,6 +232,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
     @Override
     public void mouseReleased(MouseEvent me) {
         oldX = Integer.MAX_VALUE;
+        finishSliding();
     }
 
     @Override
