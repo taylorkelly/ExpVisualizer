@@ -33,6 +33,9 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
     private List<Pulse> pulses;
     private Timer timer;
     private PacketListener listener;
+    
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 800;
 
     public ExpVisualizerServer() throws IOException {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,12 +66,12 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
         //this.add(new ButtonPanel(pulses), BorderLayout.SOUTH);
         this.add(mapPanel);
-        mapPanel.setBounds(600, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
+        mapPanel.setBounds(WIDTH, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
 
 
 
         this.pack();
-        this.setSize(new Dimension(600, 600));
+        this.setSize(new Dimension(WIDTH, HEIGHT));
         this.centerWindow();
 
 
@@ -102,7 +105,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
             server.setVisible(true);
         } catch (IOException ex) {
         }
-        
+
     }
     int oldX = Integer.MAX_VALUE;
 
@@ -112,12 +115,12 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         if (oldX != Integer.MAX_VALUE) {
             int deltaX = newX - oldX;
             deltaX *= 1.5;
-            
-            if(Math.abs(deltaX) > 100)  {
+
+            if (Math.abs(deltaX) > 100) {
                 oldX = newX;
                 return;
             }
-            
+
             Rectangle bounds = basicPanel.getBounds();
             Point origin = bounds.getLocation();
 
@@ -126,15 +129,15 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + 600, origin.getY());
+                origin.setLocation(origin.getX() + WIDTH, origin.getY());
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
-            } else if (origin.getX() + deltaX <= -600) {
-                origin.setLocation(-600, origin.getY());
+            } else if (origin.getX() + deltaX <= -WIDTH) {
+                origin.setLocation(-WIDTH, origin.getY());
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + 600, origin.getY());
+                origin.setLocation(origin.getX() + WIDTH, origin.getY());
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             } else {
@@ -142,7 +145,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + 600, origin.getY());
+                origin.setLocation(origin.getX() + WIDTH, origin.getY());
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             }

@@ -37,10 +37,12 @@ public class MapPanel extends JPanel {
     private LinkedList<BufferedImage> images;
     private TreeMap<Integer, Calendar> dateMap;
     private Map<Integer, String> textMap;
+    public static final int WIDTH = ExpVisualizerServer.WIDTH;
+    public static final int HEIGHT = ExpVisualizerServer.HEIGHT;
 
     public MapPanel(List<Pulse> pulses) throws IOException {
         this.pulses = pulses;
-        this.setPreferredSize(new Dimension(600, 600));
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
         img = ImageIO.read(getMapURL());
         images = new LinkedList<BufferedImage>();
@@ -91,28 +93,28 @@ public class MapPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
         drawTitle(g2d, "Detailed View", 35);
-        drawPhotos(g2d, 305, 60, 300, 250, 10);
-        drawTexts(g2d, 0, 60, 300, 250);
+        drawPhotos(g2d, WIDTH / 2 + 5, 60, WIDTH / 2, (int) (0.4 * HEIGHT), 10);
+        drawTexts(g2d, 0, 60, WIDTH / 2, (int) (0.4 * HEIGHT));
 
         //Map
-        g2d.drawImage(img, 0, 600 - img.getHeight(), this);
-        
+        g2d.drawImage(img, 0, (int)(0.4*HEIGHT), WIDTH, (int)(0.6*HEIGHT), this);
+
         int ovalHeight = 20;
-        int x = (getWidth()-ovalHeight)/2;
-        int y = (600 - img.getHeight())+(img.getHeight()-ovalHeight)/2;
-        
-        
-        GradientPaint gradient = new GradientPaint(x+ovalHeight/2, y, new Color(122,188,255), x+ovalHeight/ 2, y+ovalHeight, new Color(64,150,238), true);
+        int x = (getWidth() - ovalHeight) / 2;
+        int y = (HEIGHT - img.getHeight()) + (img.getHeight() - ovalHeight) / 2;
+
+
+        GradientPaint gradient = new GradientPaint(x + ovalHeight / 2, y, new Color(122, 188, 255), x + ovalHeight / 2, y + ovalHeight, new Color(64, 150, 238), true);
         g2d.setPaint(gradient);
         g2d.fillOval(x, y, ovalHeight, ovalHeight);
-        
+
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawOval(x, y, ovalHeight, ovalHeight);
-        
+
 
         // Overlay shading
-        double percent = Math.abs(this.getBounds().getX()) / 600.0;
+        double percent = Math.abs(this.getBounds().getX()) / (double) WIDTH;
         g2d.setComposite(makeComposite((float) percent));
         g2d.setPaint(Color.BLACK);
         g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -136,7 +138,7 @@ public class MapPanel extends JPanel {
 
         g.setColor(new Color(50, 50, 50));
         //g.drawLine((width - stringWidth) / 2, y + 5, (width + stringWidth) / 2, y + 5);
-        g.drawLine((width) / 2, y + 10, (width) / 2, 250);
+        g.drawLine((width) / 2, y + 10, (width) / 2, (int) (HEIGHT * 0.4));
     }
 
     private AlphaComposite makeComposite(float alpha) {
@@ -146,7 +148,33 @@ public class MapPanel extends JPanel {
 
     public URL getMapURL() throws MalformedURLException {
         StringBuilder builder = new StringBuilder();
-        builder.append("http://maps.googleapis.com/maps/api/staticmap?center=47+22'+8+32'&zoom=13&size=600x350&sensor=false");
+        builder.append("http://maps.googleapis.com/maps/api/staticmap?center=");
+        builder.append("47+22'+8+32'");
+        builder.append("&zoom=13&size=");
+
+        int width = WIDTH;
+        int height = (int)(0.6*HEIGHT);
+        double maxSize = 640.0;
+        if (WIDTH > maxSize) {
+            double ratio = maxSize / WIDTH;
+            width *= ratio;
+            height *= ratio;
+            if (height > maxSize) {
+                ratio = maxSize / HEIGHT;
+                width *= ratio;
+                height *= ratio;
+            }
+        } else if (HEIGHT > maxSize) {
+            double ratio = maxSize / HEIGHT;
+            width *= ratio;
+            height *= ratio;
+        }
+
+        builder.append(width);
+        builder.append("x");
+        builder.append(height);
+        builder.append("&sensor=false");
+        System.out.println(builder.toString());
         return new URL(builder.toString());
     }
 
