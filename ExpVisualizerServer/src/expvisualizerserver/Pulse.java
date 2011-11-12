@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.util.List;
 
 /**
  *
@@ -13,9 +14,14 @@ class Pulse {
     private long birthTime;
     private int lifeTime;
     private Paint color;
+    private Paint deadColor;
 
     public Pulse(Paint color) {
         this(color, System.currentTimeMillis(), 1000 * 10);
+    }
+
+    public Pulse(Paint color, int lifeTime) {
+        this(color, System.currentTimeMillis(), lifeTime);
     }
 
     public Pulse(Paint color, long birthTime, int lifeTime) {
@@ -24,7 +30,7 @@ class Pulse {
         this.lifeTime = lifeTime;
     }
 
-    public void draw(Graphics2D g, int width, int height) {
+    public void draw(Graphics2D g, int width, int height, List<Pulse> alivePulses) {
         int age = (int) (System.currentTimeMillis() - birthTime);
         int area = age;
         int radius = (int) Math.sqrt(area / Math.PI);
@@ -56,8 +62,17 @@ class Pulse {
             int deadX = (width - deadRectWidth) / 2;
             int deadY = (height - deadRectHeight) / 2;
 
-            g.setPaint(VisPanel.BACKGROUND_COLOR);
+            if (deadColor == null) {
+                if (alivePulses.isEmpty()) {
+                    deadColor = VisPanel.BACKGROUND_COLOR;
+                } else {
+                    deadColor = alivePulses.get(0).color;
+                }
+            }
+            g.setPaint(deadColor);
             g.fillRoundRect(deadX, deadY, deadRectWidth, deadRectHeight, deadArcWidth, deadArcHeight);
+        } else {
+            alivePulses.add(0, this);
         }
 
     }

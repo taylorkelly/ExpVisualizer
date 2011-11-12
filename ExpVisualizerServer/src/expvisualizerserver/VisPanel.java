@@ -8,6 +8,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.LinkedList;
 import javax.swing.JPanel;
 
 /**
@@ -39,8 +40,9 @@ public class VisPanel extends JPanel {
         g2d.fillRect(0, 0, WIDTH, HEIGHT);
 
 
+        List<Pulse> alivePulses = new LinkedList<Pulse>();
         for (Pulse pulse : pulses) {
-            pulse.draw(g2d, this.getWidth(), this.getHeight());
+            pulse.draw(g2d, this.getWidth(), this.getHeight(), alivePulses);
         }
 
         drawLifeline(g2d);

@@ -34,12 +34,16 @@ public class PacketListener extends Thread {
                 String received = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(received);
                 
+                String[] pieces = received.split(":");
+                String activity = pieces[0];
+                int length = Integer.parseInt(pieces[1]);
+                
                 if(received.equalsIgnoreCase("blue")) {
                     pulses.add(new Pulse(Color.BLUE));
                 } else if(received.equalsIgnoreCase("red")) {
                     pulses.add(new Pulse(Color.RED));  
                 } else if(received.equalsIgnoreCase("green")) {
-                    pulses.add(new Pulse(Color.GREEN));  
+                    pulses.add(new Pulse(Color.GREEN, 1000*2));  
                 } else if(received.equalsIgnoreCase("white")) {
                     pulses.add(new Pulse(Color.WHITE));  
                 } else if(received.equalsIgnoreCase("yellow")) {
