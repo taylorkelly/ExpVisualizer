@@ -30,6 +30,7 @@ import javax.swing.Timer;
 public class ExpVisualizerServer extends JFrame implements ActionListener, MouseMotionListener, MouseListener {
     private VisPanel basicPanel;
     private MapPanel mapPanel;
+    private ColorChangePanel colorChangePanel;
     private List<Activity> activities;
     private Timer timer;
     private PacketListener listener;
@@ -52,6 +53,9 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
         timer = new Timer(1000 / 60, this);
 
+        colorChangePanel = new ColorChangePanel();
+        colorChangePanel.addMouseListener(this);
+
         basicPanel = new VisPanel(activities);
         basicPanel.addMouseMotionListener(this);
         basicPanel.addMouseListener(this);
@@ -59,7 +63,6 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         mapPanel = new MapPanel(activities);
         mapPanel.addMouseMotionListener(this);
         mapPanel.addMouseListener(this);
-
 
         this.add(colorChangePanel);
         colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 4), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
@@ -184,7 +187,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
             if (currTicks >= numTicks) {
                 slideTimer.stop();
-                
+
                 origin.setLocation(goalPosition, origin.getY());
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
@@ -234,9 +237,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
       else if (basicPanel.getBounds().height == HEIGHT) {
         int height = basicPanel.getPreferredSize().height;
         basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, height - (height / 3));
-        colorChangePanel.setBounds(0, HEIGHT - ( HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height); 
+        colorChangePanel.setBounds(0, HEIGHT - ( HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
       }
-     
     }
 
     @Override
