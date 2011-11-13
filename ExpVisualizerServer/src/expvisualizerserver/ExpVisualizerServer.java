@@ -30,6 +30,7 @@ import javax.swing.Timer;
 public class ExpVisualizerServer extends JFrame implements ActionListener, MouseMotionListener, MouseListener {
     private VisPanel basicPanel;
     private MapPanel mapPanel;
+    private ColorChangePanel colorChangePanel;
     private List<Pulse> pulses;
     private Timer timer;
     private PacketListener listener;
@@ -43,6 +44,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
         pulses = Collections.synchronizedList(new ArrayList<Pulse>());
         pulses.add(new Pulse(Color.RED));
+        pulses.add(new Pulse(Color.BLUE));
+        pulses.add(new Pulse(Color.GREEN));
 
         try {
             listener = new PacketListener(pulses);
@@ -52,8 +55,10 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
         timer = new Timer(1000 / 60, this);
 
+        colorChangePanel = new ColorChangePanel();
+        colorChangePanel.addMouseListener(this);
+
         basicPanel = new VisPanel(pulses);
-        basicPanel.addMouseMotionListener(this);
         basicPanel.addMouseListener(this);
 
         mapPanel = new MapPanel(pulses);
@@ -61,6 +66,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         mapPanel.addMouseListener(this);
 
 
+        this.add(colorChangePanel);
+        colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 4), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
         this.add(basicPanel);
         basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
         //this.add(new ButtonPanel(pulses), BorderLayout.SOUTH);
@@ -222,6 +229,18 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mouseClicked(MouseEvent me) {
+      //upon click the vis panel will resize
+      //resize the vispanel
+      if (basicPanel.getBounds().height < HEIGHT) {
+        basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
+      }
+
+      else if (basicPanel.getBounds().height == HEIGHT) {
+        int height = basicPanel.getPreferredSize().height;
+        basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, height - (height / 3));
+        colorChangePanel.setBounds(0, HEIGHT - ( HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height); 
+      }
+     
     }
 
     @Override

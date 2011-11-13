@@ -17,6 +17,7 @@ import javax.swing.JPanel;
  */
 public class VisPanel extends JPanel {
     private List<Pulse> pulses;
+    private JPanel colorChangePanel;
     public static final int WIDTH = ExpVisualizerServer.WIDTH;
     public static final int HEIGHT = ExpVisualizerServer.HEIGHT;
     public static final GradientPaint BACKGROUND_COLOR = new GradientPaint(WIDTH / 2, HEIGHT, new Color(25, 25, 25), WIDTH / 2, 0, new Color(50, 50, 50), true);
