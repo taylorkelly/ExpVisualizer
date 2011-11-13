@@ -14,6 +14,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,13 +28,14 @@ import java.util.NavigableSet;
 import java.util.TreeMap;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
  * @author taylor
  */
 public class MapPanel extends JPanel {
-    private List<Pulse> pulses;
+    private List<Activity> activities;
     private BufferedImage img;
     private LinkedList<BufferedImage> images;
     private TreeMap<Integer, Calendar> dateMap;
@@ -40,8 +43,8 @@ public class MapPanel extends JPanel {
     public static final int WIDTH = ExpVisualizerServer.WIDTH;
     public static final int HEIGHT = ExpVisualizerServer.HEIGHT;
 
-    public MapPanel(List<Pulse> pulses) throws IOException {
-        this.pulses = pulses;
+    public MapPanel(List<Activity> activities) throws IOException {
+        this.activities = activities;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
         img = ImageIO.read(getMapURL());
@@ -49,41 +52,36 @@ public class MapPanel extends JPanel {
         loadImages();
 
         dateMap = new TreeMap<Integer, Calendar>();
-        Calendar cal = Calendar.getInstance();
-        dateMap.put(1, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, -40);
-        dateMap.put(2, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -2);
-        dateMap.put(3, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -9);
-        dateMap.put(4, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -10);
-        dateMap.put(5, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -11);
-        cal.add(Calendar.SECOND, -30);
-        dateMap.put(6, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -20);
-        dateMap.put(7, cal);
-        cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -40);
-        dateMap.put(8, cal);
-
         textMap = new HashMap<Integer, String>();
-        textMap.put(1, "Took a photo");
-        textMap.put(2, "Took a photo");
-        textMap.put(3, "Tweeted \"Hi\"");
-        textMap.put(4, "Took a photo");
-        textMap.put(5, "Took a photo");
-        textMap.put(6, "Took a video");
-        textMap.put(7, "Was on the phone");
-        textMap.put(8, "Visited Zürich Zoo");
-
+        
+        Timer timer = new Timer(1000*60, new MinuteRefresher());
+        timer.start();
+    }
+    
+    
+    private class MinuteRefresher implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            repaint();
+        } 
+    }
+    
+    public void update() {
+        int currSize = dateMap.size();
+        int newSize = activities.size();
+        
+        for(int i = currSize; i < newSize; i++) {
+            Activity currActivity = activities.get(i);
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(currActivity.birthTime());
+            dateMap.put(i, cal);
+            
+            textMap.put(i, currActivity.toString());
+        }
+        
+        if(currSize != newSize) {
+            repaint();
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -97,7 +95,7 @@ public class MapPanel extends JPanel {
         drawTexts(g2d, 0, 60, WIDTH / 2, (int) (0.4 * HEIGHT));
 
         //Map
-        g2d.drawImage(img, 0, (int)(0.4*HEIGHT), WIDTH, (int)(0.6*HEIGHT), this);
+        g2d.drawImage(img, 0, (int) (0.4 * HEIGHT), WIDTH, (int) (0.6 * HEIGHT), this);
 
         int ovalHeight = 20;
         int x = (getWidth() - ovalHeight) / 2;
@@ -153,7 +151,7 @@ public class MapPanel extends JPanel {
         builder.append("&zoom=13&size=");
 
         int width = WIDTH;
-        int height = (int)(0.6*HEIGHT);
+        int height = (int) (0.6 * HEIGHT);
         double maxSize = 640.0;
         if (WIDTH > maxSize) {
             double ratio = maxSize / WIDTH;
@@ -164,8 +162,8 @@ public class MapPanel extends JPanel {
                 width *= ratio;
                 height *= ratio;
             }
-        } else if ((0.6*HEIGHT) > maxSize) {
-            double ratio = maxSize / (0.6*HEIGHT);
+        } else if ((0.6 * HEIGHT) > maxSize) {
+            double ratio = maxSize / (0.6 * HEIGHT);
             width *= ratio;
             height *= ratio;
         }
@@ -229,7 +227,7 @@ public class MapPanel extends JPanel {
 
 
         ArrayList<Integer> lines = new ArrayList<Integer>();
-        lines.addAll(dateMap.navigableKeySet());
+        lines.addAll(dateMap.descendingKeySet());
         for (int i = 0; i < maxLines; i++) {
             if (lines.size() > 0) {
                 Integer firstLineIndex = lines.remove(0);
