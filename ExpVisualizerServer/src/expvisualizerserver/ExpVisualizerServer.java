@@ -30,7 +30,7 @@ import javax.swing.Timer;
 public class ExpVisualizerServer extends JFrame implements ActionListener, MouseMotionListener, MouseListener {
     private VisPanel basicPanel;
     private MapPanel mapPanel;
-    private List<Pulse> pulses;
+    private List<Activity> activities;
     private Timer timer;
     private PacketListener listener;
     public static final int WIDTH = 700;
@@ -41,22 +41,22 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         this.setUndecorated(true);
         this.setLayout(null);
 
-        pulses = Collections.synchronizedList(new ArrayList<Pulse>());
-        pulses.add(new Pulse(Color.RED));
+        activities = Collections.synchronizedList(new ArrayList<Activity>());
+        activities.add(new Activity(ActivityType.PHOTO, 5000));
 
         try {
-            listener = new PacketListener(pulses);
+            listener = new PacketListener(activities);
         } catch (IOException ex) {
             System.out.println("packet listener failed initialization");
         }
 
         timer = new Timer(1000 / 60, this);
 
-        basicPanel = new VisPanel(pulses);
+        basicPanel = new VisPanel(activities);
         basicPanel.addMouseMotionListener(this);
         basicPanel.addMouseListener(this);
 
-        mapPanel = new MapPanel(pulses);
+        mapPanel = new MapPanel(activities);
         mapPanel.addMouseMotionListener(this);
         mapPanel.addMouseListener(this);
 
@@ -93,6 +93,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     public void actionPerformed(ActionEvent event) {
         basicPanel.repaint();
+        mapPanel.update();
     }
 
     /**

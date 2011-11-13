@@ -54,11 +54,12 @@
     AsyncUdpSocket *socket = [[AsyncUdpSocket alloc] init];
     NSString *message;
     if(details) {
-        message = [NSString stringWithFormat:@"%@;%i;%@", activity, length, details];
+        message = [NSString stringWithFormat:@"%@:%i:%@", activity, length, details];
     } else {
-        message = [NSString stringWithFormat:@"%@;%i", activity, length];        
+        message = [NSString stringWithFormat:@"%@:%i", activity, length];        
     }
     
+    [[NSUserDefaults standardUserDefaults] setObject:ipAddress.text forKey:@"3750ipaddress"];
     NSData *data = [message dataUsingEncoding:NSASCIIStringEncoding];
     [socket sendData:data toHost:[ipAddress text] port:4445 withTimeout:-1 tag:1];
 }
@@ -74,12 +75,13 @@
 - (void)accelerometer:(UIAccelerometer *)accelerometer
         didAccelerate:(UIAcceleration *)acceleration
 {
-    NSLog(@"shake");
-    double const kThreshold = 2.0;
-    if (   fabsf(acceleration.x) > kThreshold
+    double const kThreshold = 1.5;
+    if (fabsf(acceleration.x) > kThreshold
         || fabsf(acceleration.y) > kThreshold
         || fabsf(acceleration.z) > kThreshold) {
-        NSLog(@"Hey, stop shaking me!");
+
+        int length = (int)((fabsf(acceleration.x) + fabsf(acceleration.y) + fabsf(acceleration.z))*1000);
+        [self sendPacketForActivity:@"movement" andLength:length andDetails:nil];
     }
 }
 
@@ -147,6 +149,7 @@
 {
     [super viewWillAppear:animated];
     ipAddress.delegate = self;
+    ipAddress.text = [[NSUserDefaults standardUserDefaults] stringForKey:@"3750ipaddress"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }

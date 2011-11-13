@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PeoplePicker.h"
 
-@interface ImageShareController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface ImageShareController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, PeoplePickerDelegate> {
     IBOutlet UIButton *sendPhoto;
+    IBOutlet UIButton *recept;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView * selectedImage;
@@ -17,5 +19,6 @@
 
 - (IBAction) selectPhoto;
 - (IBAction) sendPhoto;
+- (IBAction) chooseRecept;
 
 @end

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		340D329F14604AB900C1BCCB /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 340D329E14604AB900C1BCCB /* AsyncUdpSocket.m */; };
 		340D32A314604B2000C1BCCB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340D32A214604B2000C1BCCB /* CFNetwork.framework */; };
+		344CB856146F56F300C96483 /* PeoplePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 344CB854146F56F300C96483 /* PeoplePicker.m */; };
+		344CB857146F56F300C96483 /* PeoplePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344CB855146F56F300C96483 /* PeoplePicker.xib */; };
 		34A96E1C146F29BE00BEF9CD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A96E1B146F29BE00BEF9CD /* CoreLocation.framework */; };
 		34C81D68146F052F0043E0F2 /* MainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C81D67146F052F0043E0F2 /* MainMenuController.m */; };
 		34C81D6C146F08160043E0F2 /* PrivacySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C81D6B146F08160043E0F2 /* PrivacySettings.m */; };
@@ -45,6 +47,9 @@
 		340D329D14604AB900C1BCCB /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		340D329E14604AB900C1BCCB /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 		340D32A214604B2000C1BCCB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		344CB853146F56F300C96483 /* PeoplePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeoplePicker.h; sourceTree = "<group>"; };
+		344CB854146F56F300C96483 /* PeoplePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeoplePicker.m; sourceTree = "<group>"; };
+		344CB855146F56F300C96483 /* PeoplePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PeoplePicker.xib; sourceTree = "<group>"; };
 		34A96E1B146F29BE00BEF9CD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		34C81D66146F052F0043E0F2 /* MainMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuController.h; sourceTree = "<group>"; };
 		34C81D67146F052F0043E0F2 /* MainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuController.m; sourceTree = "<group>"; };
@@ -144,10 +149,13 @@
 				34E925CF145F864000D75FB7 /* AppDelegate.m */,
 				34C81D66146F052F0043E0F2 /* MainMenuController.h */,
 				34C81D67146F052F0043E0F2 /* MainMenuController.m */,
-				34C81D6D146F0B780043E0F2 /* ImageShareController.h */,
 				34C81D75146F149E0043E0F2 /* DetailedPrivacySettings.h */,
 				34C81D76146F149E0043E0F2 /* DetailedPrivacySettings.m */,
+				34C81D6D146F0B780043E0F2 /* ImageShareController.h */,
 				34C81D6E146F0B780043E0F2 /* ImageShareController.m */,
+				344CB853146F56F300C96483 /* PeoplePicker.h */,
+				344CB854146F56F300C96483 /* PeoplePicker.m */,
+				344CB855146F56F300C96483 /* PeoplePicker.xib */,
 				34C81D6A146F08160043E0F2 /* PrivacySettings.h */,
 				34C81D6B146F08160043E0F2 /* PrivacySettings.m */,
 				34E925D1145F864000D75FB7 /* ViewController.h */,
@@ -265,6 +273,7 @@
 				34E925D6145F864000D75FB7 /* ViewController.xib in Resources */,
 				34E925D9145F864000D75FB7 /* ViewController_iPad.xib in Resources */,
 				34C81D74146F0D590043E0F2 /* ImageShareController.xib in Resources */,
+				344CB857146F56F300C96483 /* PeoplePicker.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +316,7 @@
 				34C81D6C146F08160043E0F2 /* PrivacySettings.m in Sources */,
 				34C81D6F146F0B780043E0F2 /* ImageShareController.m in Sources */,
 				34C81D77146F149E0043E0F2 /* DetailedPrivacySettings.m in Sources */,
+				344CB856146F56F300C96483 /* PeoplePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

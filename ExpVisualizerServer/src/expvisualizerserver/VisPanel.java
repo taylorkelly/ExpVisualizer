@@ -16,13 +16,13 @@ import javax.swing.JPanel;
  * @author taylor
  */
 public class VisPanel extends JPanel {
-    private List<Pulse> pulses;
+    private List<Activity> activities;
     public static final int WIDTH = ExpVisualizerServer.WIDTH;
     public static final int HEIGHT = ExpVisualizerServer.HEIGHT;
     public static final GradientPaint BACKGROUND_COLOR = new GradientPaint(WIDTH / 2, HEIGHT, new Color(25, 25, 25), WIDTH / 2, 0, new Color(50, 50, 50), true);
 
-    public VisPanel(List<Pulse> pulses) {
-        this.pulses = pulses;
+    VisPanel(List<Activity> activities) {
+        this.activities = activities;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
     }
@@ -40,14 +40,15 @@ public class VisPanel extends JPanel {
         g2d.fillRect(0, 0, WIDTH, HEIGHT);
 
 
-        List<Pulse> alivePulses = new LinkedList<Pulse>();
-        for (Pulse pulse : pulses) {
-            pulse.draw(g2d, this.getWidth(), this.getHeight(), alivePulses);
+        List<Activity> alivePulses = new LinkedList<Activity>();
+        List<Activity> paintingActivities = new LinkedList<Activity>(activities);
+        for (Activity activity : paintingActivities) {
+            activity.drawPulse(g2d, this.getWidth(), this.getHeight(), alivePulses);
         }
 
         drawLifeline(g2d);
 
-        double percent = Math.abs(this.getBounds().getX()) / (double)WIDTH;
+        double percent = Math.abs(this.getBounds().getX()) / (double) WIDTH;
         g2d.setComposite(makeComposite((float) percent));
         g2d.setPaint(Color.BLACK);
         g2d.fillRect(0, 0, getWidth(), getHeight());

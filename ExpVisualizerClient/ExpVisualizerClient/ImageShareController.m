@@ -67,6 +67,24 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self dismissModalViewControllerAnimated:YES];
     sendPhoto.enabled = YES;
 }
+
+- (IBAction) chooseRecept {
+    PeoplePicker *pp = [[PeoplePicker alloc] init];
+    pp.delegate = self;
+    
+    [self presentModalViewController:pp animated:YES];
+}
+
+- (void)peoplePickerDidCancel: (PeoplePicker *)peoplePicker {
+    [self dismissModalViewControllerAnimated:YES];
+
+}
+- (void)peoplePickerDidPickPerson: (PeoplePicker *)peoplePicker withPerson:(NSString *)person {
+    recept.titleLabel.text = person;
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+
 #pragma mark - View lifecycle
 
 /*
