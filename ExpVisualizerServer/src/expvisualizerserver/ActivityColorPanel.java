@@ -66,7 +66,7 @@ public class ActivityColorPanel extends JPanel {
         g2d.setPaint(BACKGROUND_COLOR);
         g2d.fillRect(0, 0, this.width, this.height);
 
-        g2d.setFont(new Font("Futura", Font.PLAIN, this.height / 2));
+        g2d.setFont(new Font("Futura", Font.PLAIN, this.height - (this.height / 3)));
         FontMetrics metrics = g.getFontMetrics();
         int stringWidth = metrics.stringWidth(this.activityName);
         int y = (int) ((this.height - (this.height / 3)) * 1.2); 

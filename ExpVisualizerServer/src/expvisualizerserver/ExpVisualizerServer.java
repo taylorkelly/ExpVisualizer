@@ -61,7 +61,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
         timer = new Timer(1000 / 60, this);
 
-        colorChangePanel = new ColorChangePanel(activities);
+        colorChangePanel = new ColorChangePanel(Activity.listOfActivities());
         colorChangePanel.addMouseListener(this);
 
         basicPanel = new VisPanel(activities);
