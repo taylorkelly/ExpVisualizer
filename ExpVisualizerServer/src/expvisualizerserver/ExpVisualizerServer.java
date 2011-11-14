@@ -73,7 +73,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         mapPanel.addMouseListener(this);
 
         this.add(colorChangePanel);
-        colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
+        colorChangePanel.setBounds(0, HEIGHT, colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
         colorChangePanel.constructActivityColorPanels(this);
         this.add(basicPanel);
         basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
@@ -141,12 +141,17 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
             Rectangle bounds = basicPanel.getBounds();
             Point origin = bounds.getLocation();
 
+
             if (origin.getX() + deltaX >= 0) {
                 origin.setLocation(0, origin.getY());
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + WIDTH, origin.getY());
+                origin.setLocation(origin.getX(), origin.getY() + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+
+                origin.setLocation(origin.getX() + WIDTH, 0);
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             } else if (origin.getX() + deltaX <= -WIDTH) {
@@ -154,7 +159,11 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + WIDTH, origin.getY());
+                origin.setLocation(origin.getX(), origin.getY() + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+
+                origin.setLocation(origin.getX() + WIDTH, 0);
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             } else {
@@ -162,7 +171,11 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + WIDTH, origin.getY());
+                origin.setLocation(origin.getX(), origin.getY() + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+
+                origin.setLocation(origin.getX() + WIDTH, 0);
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             }
@@ -204,7 +217,11 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(goalPosition + WIDTH, origin.getY());
+                origin.setLocation(origin.getX(), origin.getY() + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+
+                origin.setLocation(goalPosition + WIDTH, 0);
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             } else {
@@ -213,7 +230,11 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(origin.getX() + WIDTH, origin.getY());
+                origin.setLocation(origin.getX(), origin.getY() + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+
+                origin.setLocation(origin.getX() + WIDTH, 0);
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
 
@@ -240,20 +261,17 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
     @Override
     public void mouseClicked(MouseEvent me) {
         Component clickComponent = me.getComponent();
-        String clickComponentClassString = clickComponent.getClass().toString();
-
-        if (!clickComponentClassString.equals("ColorChangePanel")) {
+        if (clickComponent == basicPanel) {
 
             if (colorChangePanelIsOpen) {
-                colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
-                clickComponent.setBounds(0, 0, WIDTH, HEIGHT);
-
+                slideUpTo(0, clickComponent);
                 colorChangePanelIsOpen = false;
             } else if (!colorChangePanelIsOpen) {
-                int height = basicPanel.getPreferredSize().height;
+                slideUpTo(-HEIGHT / 3, clickComponent);
+                /*int height = clickComponent.getPreferredSize().height;
                 clickComponent.setBounds(0, 0, basicPanel.getPreferredSize().width, height - (height / 3));
-                colorChangePanel.setBounds(0, HEIGHT - (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
-
+                colorChangePanel.setBounds(0, HEIGHT - (HEIGHT / 3), HEIGHT, colorChangePanel.getPreferredSize().height);
+                 */
                 colorChangePanelIsOpen = true;
             }
         }
@@ -276,5 +294,63 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mouseExited(MouseEvent me) {
+    }
+    private Timer slideUpTimer;
+
+    private void slideUpTo(int goalPosition, Component clickComponent) {
+        slideUpTimer = new Timer(1000 / 45, new SlideUpListener(goalPosition, 15, clickComponent));
+        slideUpTimer.start();
+
+
+    }
+
+    private class SlideUpListener implements ActionListener {
+        private int goalPosition;
+        private int currTicks;
+        private int numTicks;
+        private int stepSize;
+        private Component clickComponent;
+
+        public SlideUpListener(int goalPosition, int numTicks, Component clickComponent) {
+            this.goalPosition = goalPosition;
+            this.currTicks = 0;
+            this.numTicks = numTicks;
+            this.clickComponent = clickComponent;
+            Rectangle bounds = clickComponent.getBounds();
+            Point origin = bounds.getLocation();
+            int y = (int) origin.getY();
+            this.stepSize = (goalPosition - y) / numTicks;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            Rectangle bounds = clickComponent.getBounds();
+
+            Point origin = bounds.getLocation();
+
+            int y = (int) origin.getY();
+
+            if (currTicks >= numTicks) {
+                slideUpTimer.stop();
+
+                origin.setLocation(origin.getX(), goalPosition);
+                bounds.setLocation(origin);
+                clickComponent.setBounds(bounds);
+
+                origin.setLocation(origin.getX(), goalPosition + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+            } else {
+                int deltaY = stepSize;
+                origin.setLocation(origin.getX(), origin.getY() + deltaY);
+                bounds.setLocation(origin);
+                clickComponent.setBounds(bounds);
+
+                origin.setLocation(origin.getX(), origin.getY() + HEIGHT);
+                bounds.setLocation(origin);
+                colorChangePanel.setBounds(bounds);
+
+                currTicks++;
+            }
+        }
     }
 }
