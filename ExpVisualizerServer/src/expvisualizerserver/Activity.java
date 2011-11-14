@@ -6,6 +6,7 @@ package expvisualizerserver;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Color;
 import java.util.List;
 
 /**
@@ -103,6 +104,33 @@ public class Activity {
         }
 
         return str;
+    }
+
+    public ActivityType getActivityType() {
+      return this.type;
+    }
+
+    public String getDetails() {
+      return this.details;
+    }
+
+    public void setColor(Color c) {
+      ActivityColorMap.activityColorMap.put(this.type, c);
+    }
+
+    public String parseActivityType() {
+      switch (type) {
+        case PHOTO: return "Photo Uploaded";
+        case LOCATION_CHANGE: return "Location Change";
+        case PHYSICAL_MOVEMENT: return "Physical Movement";
+        case VIDEO: return "Video Uploaded";
+        case TEXT: return "Text Message Sent";
+        case EMAIL: return "Email Sent";
+        case TWEET: return "Tweet Sent";
+        case PHONE_CALL: return "Used Phone";
+        case MISC: return "Miscellaenous Task";
+        default: return "default";
+      }
     }
 }
 
