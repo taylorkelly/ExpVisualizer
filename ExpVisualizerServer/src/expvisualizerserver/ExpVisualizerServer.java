@@ -37,8 +37,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
     private Timer timer;
     private PacketListener listener;
     private Boolean colorChangePanelIsOpen = false;
-    public static final int WIDTH = 700;
-    public static final int HEIGHT = 700;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 800;
 
     public ExpVisualizerServer() throws IOException {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,8 +46,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         this.setLayout(null);
 
         activities = Collections.synchronizedList(new ArrayList<Activity>());
+        activities.add(new Activity(ActivityType.TWEET, System.currentTimeMillis() - 1000 * 60, 2500, "Hello!"));
         activities.add(new Activity(ActivityType.PHOTO, 5000));
-        activities.add(new Activity(ActivityType.TWEET, 2500));
 
         try {
             listener = new PacketListener(activities);
@@ -56,7 +56,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         }
 
         for (Activity activity : activities) {
-          activity.parseActivityType();
+            activity.parseActivityType();
         }
 
         timer = new Timer(1000 / 60, this);
@@ -109,7 +109,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         colorChangePanel.repaint();
 
         if (event.getSource() instanceof JButton) {
-          ((ColorChangeButton) event.getSource()).editColor();
+            ((ColorChangeButton) event.getSource()).editColor();
         }
     }
 
@@ -204,7 +204,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
 
-                origin.setLocation(goalPosition+WIDTH, origin.getY());
+                origin.setLocation(goalPosition + WIDTH, origin.getY());
                 bounds.setLocation(origin);
                 mapPanel.setBounds(bounds);
             } else {
@@ -239,25 +239,24 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mouseClicked(MouseEvent me) {
-      Component clickComponent = me.getComponent();
-      String clickComponentClassString = clickComponent.getClass().toString();
+        Component clickComponent = me.getComponent();
+        String clickComponentClassString = clickComponent.getClass().toString();
 
-      if (!clickComponentClassString.equals("ColorChangePanel")) {
+        if (!clickComponentClassString.equals("ColorChangePanel")) {
 
-        if (colorChangePanelIsOpen) {
-          colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
-          clickComponent.setBounds(0, 0, WIDTH, HEIGHT);
+            if (colorChangePanelIsOpen) {
+                colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
+                clickComponent.setBounds(0, 0, WIDTH, HEIGHT);
 
-          colorChangePanelIsOpen = false;
+                colorChangePanelIsOpen = false;
+            } else if (!colorChangePanelIsOpen) {
+                int height = basicPanel.getPreferredSize().height;
+                clickComponent.setBounds(0, 0, basicPanel.getPreferredSize().width, height - (height / 3));
+                colorChangePanel.setBounds(0, HEIGHT - (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
+
+                colorChangePanelIsOpen = true;
+            }
         }
-        else if (!colorChangePanelIsOpen) {
-          int height = basicPanel.getPreferredSize().height;
-          clickComponent.setBounds(0, 0, basicPanel.getPreferredSize().width, height - (height / 3));
-          colorChangePanel.setBounds(0, HEIGHT - ( HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
-
-          colorChangePanelIsOpen = true;
-        }
-      }
     }
 
     @Override

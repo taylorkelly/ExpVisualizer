@@ -144,7 +144,7 @@ public class MapPanel extends JPanel {
     public URL getMapURL() throws MalformedURLException {
         StringBuilder builder = new StringBuilder();
         builder.append("http://maps.googleapis.com/maps/api/staticmap?center=");
-        builder.append("47+22'+8+32'");
+        builder.append("33.77666+-84.39611");
         builder.append("&zoom=13&size=");
 
         int width = WIDTH;
@@ -174,10 +174,12 @@ public class MapPanel extends JPanel {
     }
 
     private void drawPhotos(Graphics2D g, int x, int y, int width, int height, int padding) {
+        x += 10;
         int numImagesAcross = width / 75;
         int numImagesDown = height / 75;
         int imgIndex = 0;
 
+        
         for (int i = 0; i < numImagesDown; i++) {
             for (int j = 0; j < numImagesAcross; j++) {
                 int imageX = x + j * 75;
