@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Color;
 import java.util.List;
+import java.util.LinkedList;
 
 /**
  *
@@ -116,6 +117,17 @@ public class Activity {
 
     public void setColor(Color c) {
       ActivityColorMap.activityColorMap.put(this.type, c);
+    }
+
+    public static List<Activity> listOfActivities() {
+      List<Activity> listOfActivities = new LinkedList<Activity>();
+      Object[] activityTypes = ActivityColorMap.activityColorMap.keySet().toArray();
+
+      for (int i=0; i < activityTypes.length; i++) {
+        ActivityType type = (ActivityType) activityTypes[i];
+        listOfActivities.add(new Activity(type, 0));
+      }
+      return listOfActivities;
     }
 
     public String parseActivityType() {
