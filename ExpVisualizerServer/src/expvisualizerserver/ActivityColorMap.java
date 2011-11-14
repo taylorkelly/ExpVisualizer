@@ -14,8 +14,8 @@ import java.util.Map;
  * @author taylor
  */
 public class ActivityColorMap {
-    private static Map<ActivityType, Paint> activityColorMap;
-    
+    public static Map<ActivityType, Paint> activityColorMap;
+
     static {
         activityColorMap = new HashMap<ActivityType, Paint>();
         activityColorMap.put(ActivityType.EMAIL, Color.YELLOW);
@@ -28,9 +28,8 @@ public class ActivityColorMap {
         activityColorMap.put(ActivityType.TWEET, Color.CYAN);
         activityColorMap.put(ActivityType.VIDEO, Color.MAGENTA);
     }
-    
+
     public static Paint colorForActivity(ActivityType activityType) {
         return activityColorMap.get(activityType);
     }
-    
 }

@@ -6,7 +6,9 @@ package expvisualizerserver;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Color;
 import java.util.List;
+import java.util.LinkedList;
 
 /**
  *
@@ -103,6 +105,44 @@ public class Activity {
         }
 
         return str;
+    }
+
+    public ActivityType getActivityType() {
+      return this.type;
+    }
+
+    public String getDetails() {
+      return this.details;
+    }
+
+    public void setColor(Color c) {
+      ActivityColorMap.activityColorMap.put(this.type, c);
+    }
+
+    public static List<Activity> listOfActivities() {
+      List<Activity> listOfActivities = new LinkedList<Activity>();
+      Object[] activityTypes = ActivityColorMap.activityColorMap.keySet().toArray();
+
+      for (int i=0; i < activityTypes.length; i++) {
+        ActivityType type = (ActivityType) activityTypes[i];
+        listOfActivities.add(new Activity(type, 0));
+      }
+      return listOfActivities;
+    }
+
+    public String parseActivityType() {
+      switch (type) {
+        case PHOTO: return "Photo Uploaded";
+        case LOCATION_CHANGE: return "Location Change";
+        case PHYSICAL_MOVEMENT: return "Physical Movement";
+        case VIDEO: return "Video Uploaded";
+        case TEXT: return "Text Message Sent";
+        case EMAIL: return "Email Sent";
+        case TWEET: return "Tweet Sent";
+        case PHONE_CALL: return "Used Phone";
+        case MISC: return "Miscellaenous Task";
+        default: return "default";
+      }
     }
 }
 

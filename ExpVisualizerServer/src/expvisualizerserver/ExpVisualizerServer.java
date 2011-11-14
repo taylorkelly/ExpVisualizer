@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.awt.Component;
 
 /**
  *
@@ -30,9 +31,12 @@ import javax.swing.Timer;
 public class ExpVisualizerServer extends JFrame implements ActionListener, MouseMotionListener, MouseListener {
     private VisPanel basicPanel;
     private MapPanel mapPanel;
+    private ColorChangePanel colorChangePanel;
+    private List<ColorChangeButton> colorButtons;
     private List<Activity> activities;
     private Timer timer;
     private PacketListener listener;
+    private Boolean colorChangePanelIsOpen = false;
     public static final int WIDTH = 700;
     public static final int HEIGHT = 700;
 
@@ -43,6 +47,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
         activities = Collections.synchronizedList(new ArrayList<Activity>());
         activities.add(new Activity(ActivityType.PHOTO, 5000));
+        activities.add(new Activity(ActivityType.TWEET, 2500));
 
         try {
             listener = new PacketListener(activities);
@@ -50,7 +55,14 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
             System.out.println("packet listener failed initialization");
         }
 
+        for (Activity activity : activities) {
+          activity.parseActivityType();
+        }
+
         timer = new Timer(1000 / 60, this);
+
+        colorChangePanel = new ColorChangePanel(Activity.listOfActivities());
+        colorChangePanel.addMouseListener(this);
 
         basicPanel = new VisPanel(activities);
         basicPanel.addMouseMotionListener(this);
@@ -60,14 +72,14 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         mapPanel.addMouseMotionListener(this);
         mapPanel.addMouseListener(this);
 
-
+        this.add(colorChangePanel);
+        colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
+        colorChangePanel.constructActivityColorPanels(this);
         this.add(basicPanel);
         basicPanel.setBounds(0, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
         //this.add(new ButtonPanel(pulses), BorderLayout.SOUTH);
         this.add(mapPanel);
         mapPanel.setBounds(WIDTH, 0, basicPanel.getPreferredSize().width, basicPanel.getPreferredSize().height);
-
-
 
         this.pack();
         this.setSize(new Dimension(WIDTH, HEIGHT));
@@ -94,6 +106,11 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
     public void actionPerformed(ActionEvent event) {
         basicPanel.repaint();
         mapPanel.update();
+        colorChangePanel.repaint();
+
+        if (event.getSource() instanceof JButton) {
+          ((ColorChangeButton) event.getSource()).editColor();
+        }
     }
 
     /**
@@ -182,7 +199,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
             if (currTicks >= numTicks) {
                 slideTimer.stop();
-                
+
                 origin.setLocation(goalPosition, origin.getY());
                 bounds.setLocation(origin);
                 basicPanel.setBounds(bounds);
@@ -202,7 +219,6 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
                 currTicks++;
             }
-
         }
     }
 
@@ -223,6 +239,25 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mouseClicked(MouseEvent me) {
+      Component clickComponent = me.getComponent();
+      String clickComponentClassString = clickComponent.getClass().toString();
+
+      if (!clickComponentClassString.equals("ColorChangePanel")) {
+
+        if (colorChangePanelIsOpen) {
+          colorChangePanel.setBounds(0, HEIGHT + (HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
+          clickComponent.setBounds(0, 0, WIDTH, HEIGHT);
+
+          colorChangePanelIsOpen = false;
+        }
+        else if (!colorChangePanelIsOpen) {
+          int height = basicPanel.getPreferredSize().height;
+          clickComponent.setBounds(0, 0, basicPanel.getPreferredSize().width, height - (height / 3));
+          colorChangePanel.setBounds(0, HEIGHT - ( HEIGHT / 3), colorChangePanel.getPreferredSize().width, colorChangePanel.getPreferredSize().height);
+
+          colorChangePanelIsOpen = true;
+        }
+      }
     }
 
     @Override

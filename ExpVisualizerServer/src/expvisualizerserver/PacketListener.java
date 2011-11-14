@@ -12,7 +12,7 @@ public class PacketListener extends Thread {
     protected List<Activity> activities;
 
     public PacketListener(List<Activity> activities) throws IOException {
-	this("PacketListener", activities);
+	    this("PacketListener", activities);
     }
 
     public PacketListener(String name, List<Activity> activities) throws IOException {
@@ -29,19 +29,18 @@ public class PacketListener extends Thread {
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-
                 
                 String received = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(received);
-                
+
                 String[] pieces = received.split(":");
-                
-                if(pieces.length == 2) {
+
+                if (pieces.length == 2) {
                     activities.add(new Activity(pieces[0], Integer.parseInt(pieces[1])));
                 } else if (pieces.length == 3) {
-                    activities.add(new Activity(pieces[0], Integer.parseInt(pieces[1]), pieces[2]));                    
+                    activities.add(new Activity(pieces[0], Integer.parseInt(pieces[1]), pieces[2]));
                 }
-                
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
