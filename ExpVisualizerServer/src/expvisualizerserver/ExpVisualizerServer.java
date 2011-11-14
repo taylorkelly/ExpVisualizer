@@ -48,8 +48,8 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
         this.setLayout(null);
 
         activities = Collections.synchronizedList(new ArrayList<Activity>());
-        activities.add(new Activity(ActivityType.TWEET, System.currentTimeMillis() - 1000 * 60, 2500, "Hello!"));
-        activities.add(new Activity(ActivityType.PHOTO, 5000));
+        //activities.add(new Activity(ActivityType.TWEET, System.currentTimeMillis() - 1000 * 60, 2500, "Hello!"));
+        //activities.add(new Activity(ActivityType.PHOTO, 5000));
 
         try {
             listener = new PacketListener(activities);
