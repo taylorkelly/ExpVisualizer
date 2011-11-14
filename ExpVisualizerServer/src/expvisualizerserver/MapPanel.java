@@ -53,32 +53,32 @@ public class MapPanel extends JPanel {
 
         dateMap = new TreeMap<Integer, Calendar>();
         textMap = new HashMap<Integer, String>();
-        
+
         Timer timer = new Timer(1000*60, new MinuteRefresher());
         timer.start();
     }
-    
-    
+
+
     private class MinuteRefresher implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             repaint();
-        } 
+        }
     }
-    
+
     public void update() {
         int currSize = dateMap.size();
         int newSize = activities.size();
-        
+
         for(int i = currSize; i < newSize; i++) {
             Activity currActivity = activities.get(i);
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(currActivity.birthTime());
             dateMap.put(i, cal);
-            
+
             textMap.put(i, currActivity.toString());
         }
-        
+
         if(currSize != newSize) {
             repaint();
         }
