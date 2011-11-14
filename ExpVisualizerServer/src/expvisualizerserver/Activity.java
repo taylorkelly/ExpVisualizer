@@ -46,7 +46,7 @@ public class Activity {
     public void drawPulse(Graphics2D g2d, int width, int height, List<Activity> pastPulses) {
         int age = (int) (System.currentTimeMillis() - birthTime);
 
-        int area = age/3;
+        int area = age/2;
         int radius = (int) Math.sqrt(area / Math.PI);
 
         int rectWidth = (int) (width * 0.75 + radius * 2);
@@ -65,7 +65,7 @@ public class Activity {
 
 
         if (age > length) {
-            int deadArea = (age - length)/3;
+            int deadArea = (age - length)/2;
             int deadRadius = (int) Math.sqrt(deadArea / Math.PI);
 
 
