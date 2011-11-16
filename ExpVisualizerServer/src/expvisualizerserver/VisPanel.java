@@ -42,11 +42,16 @@ public class VisPanel extends JPanel {
 
         List<Activity> alivePulses = new LinkedList<Activity>();
         List<Activity> paintingActivities = new LinkedList<Activity>(activities);
+        
         for (Activity activity : paintingActivities) {
             activity.drawPulse(g2d, this.getWidth(), this.getHeight(), alivePulses);
         }
 
-        drawLifeline(g2d);
+        boolean alive = false;
+        if(!paintingActivities.isEmpty())
+            alive = paintingActivities.get(paintingActivities.size()-1).isAlive(System.currentTimeMillis());
+
+        drawLifeline(g2d, alive);
 
         double percent = Math.abs(this.getBounds().getX()) / (double) WIDTH;
         g2d.setComposite(makeComposite((float) percent));
@@ -59,18 +64,56 @@ public class VisPanel extends JPanel {
         int type = AlphaComposite.SRC_OVER;
         return (AlphaComposite.getInstance(type, alpha));
     }
+    double size = 0;
+    double minSize = 0;
+    double maxSize = 5;
+    double growSpeed = 0.15;
+    double maxTime = 100*0.2*0.2/(growSpeed*growSpeed);
+    int step = 0;
+    
+    private boolean canGrow() {
+        if(step <= maxTime) {
+            step++;
+            return false;
+        } else {
+            step++;
+            return true;
+        }
+    }
+    
+    private void drawLifeline(Graphics2D g, boolean alive) {
+        if(alive) {
+            growSpeed = growSpeed/Math.abs(growSpeed)*0.4;
+        } else {
+            growSpeed = growSpeed/Math.abs(growSpeed)*0.15;
+        }
+        maxTime = 100*0.2*0.2/(growSpeed*growSpeed);
+        
+        int rectWidth = (int) (this.getWidth() * 0.75 + size);
 
-    private void drawLifeline(Graphics2D g) {
-        int rectWidth = (int) (this.getWidth() * 0.75);
-        int rectHeight = 10;
-        int arcWidth = 10;
-        int arcHeight = 10;
+        int rectHeight = (int) (10 + size);
+
+        if (canGrow()) {
+            size += growSpeed;
+            if (size > maxSize) {
+                growSpeed *= -1;
+                size = maxSize;
+            } else if (size < minSize) {
+                growSpeed *= -1;
+                step = 0;
+                size = minSize;
+            }
+        }
+
+        int arcWidth = rectHeight;
+        int arcHeight = rectHeight;
 
 
         int x = (this.getWidth() - rectWidth) / 2;
         int y = (this.getHeight() - rectHeight) / 2;
 
-        g.setColor(Color.WHITE);
+        double MULT = 6;
+        g.setColor(new Color((int)(255-size*MULT), (int)(255-size*MULT), (int)(255-size*MULT)));
         g.fillRoundRect(x, y, rectWidth, rectHeight, arcWidth, arcHeight);
 
     }

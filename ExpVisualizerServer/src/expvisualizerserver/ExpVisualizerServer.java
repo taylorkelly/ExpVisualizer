@@ -44,7 +44,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
 
     public ExpVisualizerServer() throws IOException {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setUndecorated(true);
+        //this.setUndecorated(true);
         this.setLayout(null);
 
         activities = Collections.synchronizedList(new ArrayList<Activity>());
@@ -162,7 +162,7 @@ public class ExpVisualizerServer extends JFrame implements ActionListener, Mouse
             int deltaX = newX - oldX;
             deltaX *= 1.5;
 
-            if (Math.abs(deltaX) > 100) {
+            if (Math.abs(deltaX) > 200) {
                 oldX = newX;
                 return;
             }

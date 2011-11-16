@@ -46,7 +46,7 @@ public class ColorChangePanel extends JPanel { //holder for the activity panels
         if (this.activities.size() > 0)
             this.heightAdjuster = this.activities.size();
         int y = 0;
-        int yDelta = (getHeight() / this.activities.size()) - 4; //for borders
+        int yDelta = (getHeight() / this.activities.size()-2); //for borders
         for (Activity activity : this.activities) {
             activityPanels.add(new ActivityColorPanel(activity, 0, y, WIDTH, yDelta, frame));
             y = y + yDelta;
